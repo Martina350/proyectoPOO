@@ -5,45 +5,54 @@
 {% block content %}
     <a href="{{ url_for('inicio') }}" class="btn btn-outline-secondary mb-3">Seguir comprando</a>
 
-    <h1 class="mb-4">Mi Carrito</h1>
+    <h1 class="h3 mb-4">Mi Carrito</h1>
 
     {% if items %}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Producto</th>
-                    <th>Precio unitario</th>
-                    <th>Cantidad</th>
-                    <th>Subtotal</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in items %}
-                <tr>
-                    <td>
-                        {{ item.producto.nombre }}
-                        <span class="badge bg-secondary">{{ item.producto.tipo }}</span>
-                    </td>
-                    <td>${{ "%.2f"|format(item.producto.precio_final()) }}</td>
-                    <td>{{ item.cantidad }}</td>
-                    <td class="fw-bold">${{ "%.2f"|format(item.subtotal) }}</td>
-                    <td>
-                        <form action="{{ url_for('eliminar_carrito', producto_id=item.producto.id) }}" method="POST">
-                            <button type="submit" class="btn btn-sm btn-outline-danger">Quitar</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio unitario</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="{{ url_for('static', filename=item.producto.url_imagen()) }}"
+                                     class="rounded carrito-mini"
+                                     alt="{{ item.producto.nombre }}">
+                                <div>
+                                    {{ item.producto.nombre }}
+                                    <span class="badge bg-secondary">{{ item.producto.tipo }}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>${{ "%.2f"|format(item.producto.precio_final()) }}</td>
+                        <td>{{ item.cantidad }}</td>
+                        <td class="fw-bold">${{ "%.2f"|format(item.subtotal) }}</td>
+                        <td>
+                            <form action="{{ url_for('eliminar_carrito', producto_id=item.producto.id) }}" method="POST">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Quitar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
         <div class="d-flex justify-content-end">
-            <div class="card" style="width: 20rem;">
+            <div class="card shadow-sm border-0" style="width: 20rem;">
                 <div class="card-body">
-                    <h4 class="d-flex justify-content-between">
+                    <h4 class="d-flex justify-content-between mb-0">
                         <span>Total:</span>
-                        <span>${{ "%.2f"|format(total) }}</span>
+                        <span class="text-success">${{ "%.2f"|format(total) }}</span>
                     </h4>
                 </div>
             </div>

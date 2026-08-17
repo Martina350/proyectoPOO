@@ -55,11 +55,17 @@ class Producto(db.Model):
     dias_para_vencer = db.Column(db.Integer, nullable=True)
 
     tipo = db.Column(db.String(30))
+    imagen = db.Column(db.String(255), nullable=True)
 
     __mapper_args__ = {
         "polymorphic_identity": "producto",
         "polymorphic_on": tipo,
     }
+
+    def url_imagen(self):
+        if self.imagen:
+            return "uploads/" + self.imagen
+        return "img/sin_imagen.svg"
 
     def precio_final(self):
         return self.precio_base

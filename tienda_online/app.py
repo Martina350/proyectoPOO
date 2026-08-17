@@ -4,7 +4,10 @@ Punto de entrada de la aplicacion. Aqui se crea la app de Flask,
 se conecta con la base de datos, y se definen las rutas (URLs).
 """
 
+import os
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, session, flash
+from werkzeug.utils import secure_filename
 from config import Config
 from models import db, Producto, ProductoFisico, ProductoDigital, ProductoPerecible, Usuario
 from auth import login_requerido, rol_requerido
@@ -13,6 +16,27 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 db.init_app(app)
+
+os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+
+EXTENSIONES_PERMITIDAS = {"png", "jpg", "jpeg", "gif", "webp"}
+
+
+def archivo_permitido(nombre):
+    return "." in nombre and nombre.rsplit(".", 1)[1].lower() in EXTENSIONES_PERMITIDAS
+
+
+def guardar_imagen(archivo):
+    if not archivo or archivo.filename == "":
+        return None
+    if not archivo_permitido(archivo.filename):
+        flash("Formato de imagen no permitido. Usa png, jpg, jpeg, gif o webp.", "danger")
+        return None
+    nombre_seguro = secure_filename(archivo.filename)
+    nombre_final = str(int(datetime.utcnow().timestamp())) + "_" + nombre_seguro
+    ruta = os.path.join(app.config["UPLOAD_FOLDER"], nombre_final)
+    archivo.save(ruta)
+    return nombre_final
 
 
 @app.route("/")
@@ -42,6 +66,9 @@ def nuevo_producto_fisico():
                 peso_kg=float(request.form["peso_kg"]),
                 costo_envio_por_kg=float(request.form["costo_envio_por_kg"]),
             )
+            nombre_imagen = guardar_imagen(request.files.get("imagen"))
+            if nombre_imagen:
+                producto.imagen = nombre_imagen
             db.session.add(producto)
             db.session.commit()
             flash(f"Producto fisico '{producto.nombre}' creado correctamente.", "success")
@@ -67,6 +94,9 @@ def nuevo_producto_digital():
                 stock=int(request.form["stock"]),
                 licencia=request.form["licencia"],
             )
+            nombre_imagen = guardar_imagen(request.files.get("imagen"))
+            if nombre_imagen:
+                producto.imagen = nombre_imagen
             db.session.add(producto)
             db.session.commit()
             flash(f"Producto digital '{producto.nombre}' creado correctamente.", "success")
@@ -92,6 +122,9 @@ def nuevo_producto_perecible():
                 stock=int(request.form["stock"]),
                 dias_para_vencer=int(request.form["dias_para_vencer"]),
             )
+            nombre_imagen = guardar_imagen(request.files.get("imagen"))
+            if nombre_imagen:
+                producto.imagen = nombre_imagen
             db.session.add(producto)
             db.session.commit()
             flash(f"Producto perecible '{producto.nombre}' creado correctamente.", "success")
@@ -115,6 +148,9 @@ def editar_producto(producto_id):
             producto.nombre = request.form["nombre"]
             producto.precio_base = float(request.form["precio_base"])
             producto.stock = int(request.form["stock"])
+            nombre_imagen = guardar_imagen(request.files.get("imagen"))
+            if nombre_imagen:
+                producto.imagen = nombre_imagen
             db.session.commit()
             flash(f"Producto '{producto.nombre}' actualizado correctamente.", "success")
             return redirect(url_for("detalle_producto", producto_id=producto.id))

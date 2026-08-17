@@ -5,15 +5,15 @@
 {% block content %}
     <a href="{{ url_for('detalle_producto', producto_id=producto.id) }}" class="btn btn-outline-secondary mb-3">Cancelar</a>
 
-    <div class="card">
-        <div class="card-body">
-            <h2 class="mb-1">Editar Producto</h2>
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <h2 class="h4 mb-1">Editar Producto</h2>
             <p class="text-muted mb-4">
                 <span class="badge bg-secondary">{{ producto.tipo }}</span>
                 Codigo: {{ producto.codigo }} (no editable)
             </p>
 
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label">Nombre</label>
                     <input type="text" class="form-control" name="nombre" value="{{ producto.nombre }}" required>
@@ -32,12 +32,23 @@
                     </div>
                 </div>
 
+                <div class="mb-3">
+                    <label class="form-label">Imagen del producto</label>
+                    {% if producto.imagen %}
+                    <p class="mb-2">Imagen actual:</p>
+                    <img src="{{ url_for('static', filename=producto.url_imagen()) }}"
+                         alt="{{ producto.nombre }}" class="img-thumbnail mb-3" style="max-height: 160px;">
+                    {% endif %}
+                    <input type="file" class="form-control" name="imagen" accept="image/*">
+                    <small class="text-muted">Opcional. Si no eliges archivo, se conserva la imagen actual.</small>
+                </div>
+
                 <div class="alert alert-info">
                     Nota: los campos especificos del tipo de producto (peso, licencia, dias de vencimiento)
                     no se editan aqui en esta version - solo los datos generales.
                 </div>
 
-                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                <button type="submit" class="btn btn-marca">Guardar cambios</button>
             </form>
         </div>
     </div>

@@ -5,11 +5,11 @@
 {% block content %}
     <a href="{{ url_for('inicio') }}" class="btn btn-outline-secondary mb-3">Volver al catalogo</a>
 
-    <div class="card">
-        <div class="card-body">
-            <h2 class="mb-4">Nuevo Producto Fisico</h2>
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <h2 class="h4 mb-4">Nuevo Producto Fisico</h2>
 
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label">Codigo</label>
                     <input type="text" class="form-control" name="codigo" required>
@@ -42,7 +42,13 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Crear producto</button>
+                <div class="mb-3">
+                    <label class="form-label">Imagen del producto</label>
+                    <input type="file" class="form-control" name="imagen" accept="image/*">
+                    <small class="text-muted">Opcional. png, jpg, jpeg, gif o webp. Maximo 2 MB.</small>
+                </div>
+
+                <button type="submit" class="btn btn-marca">Crear producto</button>
             </form>
         </div>
     </div>

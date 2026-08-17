@@ -3,31 +3,31 @@
 {% block titulo %}Catalogo - Tienda Online{% endblock %}
 
 {% block content %}
-    <div class="mb-4">
-        <h1 class="h3 mb-1">Catalogo</h1>
-        <p class="text-muted mb-0">Productos disponibles ahora</p>
+    <div class="hero-tienda p-4 p-md-5 mb-5">
+        <h1 class="h2 fw-bold mb-2">Catalogo</h1>
+        <p class="mb-0 opacity-75">Encuentra productos fisicos, digitales y perecibles en un solo lugar.</p>
     </div>
 
     <div class="row g-4">
         {% for producto in productos %}
         <div class="col-12 col-sm-6 col-lg-4">
-            <div class="card h-100 shadow-sm border-0">
+            <div class="card card-tienda h-100">
                 <img src="{{ url_for('static', filename=producto.url_imagen()) }}"
                      class="card-img-top catalogo-img"
                      alt="{{ producto.nombre }}">
-                <div class="card-body d-flex flex-column">
+                <div class="card-body d-flex flex-column p-4">
                     {% if producto.tipo == "fisico" %}
-                        <span class="badge bg-primary mb-2 align-self-start">Fisico</span>
+                        <span class="badge badge-tipo bg-primary mb-2 align-self-start">Fisico</span>
                     {% elif producto.tipo == "digital" %}
-                        <span class="badge bg-info text-dark mb-2 align-self-start">Digital</span>
+                        <span class="badge badge-tipo bg-info text-dark mb-2 align-self-start">Digital</span>
                     {% elif producto.tipo == "perecible" %}
-                        <span class="badge bg-warning text-dark mb-2 align-self-start">Perecible</span>
+                        <span class="badge badge-tipo bg-warning text-dark mb-2 align-self-start">Perecible</span>
                     {% else %}
-                        <span class="badge bg-secondary mb-2 align-self-start">{{ producto.tipo }}</span>
+                        <span class="badge badge-tipo bg-secondary mb-2 align-self-start">{{ producto.tipo }}</span>
                     {% endif %}
-                    <h5 class="card-title">{{ producto.nombre }}</h5>
+                    <h5 class="card-title fw-semibold">{{ producto.nombre }}</h5>
                     <p class="card-text text-muted small mb-2">Codigo: {{ producto.codigo }}</p>
-                    <p class="fs-4 fw-bold text-success mb-3">
+                    <p class="fs-4 precio-marca mb-4">
                         ${{ "%.2f"|format(producto.precio_final()) }}
                     </p>
                     <div class="mt-auto d-flex gap-2 flex-wrap">
@@ -37,7 +37,7 @@
                         </a>
                         {% if session.get('usuario_rol') == 'cliente' %}
                         <form action="{{ url_for('agregar_carrito', producto_id=producto.id) }}" method="POST">
-                            <button type="submit" class="btn btn-outline-success">
+                            <button type="submit" class="btn btn-outline-success btn-suave">
                                 <i class="bi bi-cart-plus"></i> Agregar
                             </button>
                         </form>
@@ -48,7 +48,11 @@
         </div>
         {% else %}
         <div class="col-12">
-            <p class="text-center text-muted py-5">No hay productos disponibles todavia.</p>
+            <div class="card card-tienda">
+                <div class="card-body text-center py-5">
+                    <p class="text-muted mb-0">No hay productos disponibles todavia.</p>
+                </div>
+            </div>
         </div>
         {% endfor %}
     </div>

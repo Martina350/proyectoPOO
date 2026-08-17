@@ -1,39 +1,39 @@
 {% extends "base.html" %}
 {% block titulo %}Nuevo Producto Digital{% endblock %}
 {% block content %}
-    <a href="{{ url_for('inicio') }}" class="btn btn-outline-secondary mb-3">Volver al catalogo</a>
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-4">
-            <h2 class="h4 mb-4">Nuevo Producto Digital</h2>
+    <a href="{{ url_for('inicio') }}" class="btn btn-outline-secondary btn-suave mb-4">Volver al catalogo</a>
+    <div class="card card-tienda">
+        <div class="card-body p-4 p-md-5">
+            <h2 class="h4 fw-bold mb-4">Nuevo Producto Digital</h2>
             <form method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
-                    <label class="form-label">Codigo</label>
+                    <label class="form-label fw-medium">Codigo</label>
                     <input type="text" class="form-control" name="codigo" required>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Nombre</label>
+                    <label class="form-label fw-medium">Nombre</label>
                     <input type="text" class="form-control" name="nombre" required>
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Precio base ($)</label>
+                        <label class="form-label fw-medium">Precio base ($)</label>
                         <input type="number" step="0.01" class="form-control" name="precio_base" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Stock inicial</label>
+                        <label class="form-label fw-medium">Stock inicial</label>
                         <input type="number" class="form-control" name="stock" required>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Tipo de licencia</label>
+                    <label class="form-label fw-medium">Tipo de licencia</label>
                     <select class="form-control" name="licencia" required>
                         <option value="personal">Personal</option>
                         <option value="comercial">Comercial</option>
                         <option value="educativa">Educativa</option>
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Imagen del producto</label>
+                <div class="mb-4">
+                    <label class="form-label fw-medium">Imagen del producto</label>
                     <input type="file" class="form-control" name="imagen" accept="image/*">
                     <small class="text-muted">Opcional. png, jpg, jpeg, gif o webp. Maximo 2 MB.</small>
                 </div>
